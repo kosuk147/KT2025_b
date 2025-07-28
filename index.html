@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025年 バースデーグッズ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* パスワード認証画面のスタイル */
+        .password-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 1000;
+        }
+
+        .password-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .password-container h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .password-container p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+        }
+
+        .password-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .password-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* メインコンテンツ（初期は非表示） */
+        .main-content {
+            display: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .goods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px;
+        }
+
+        .goods-item {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .goods-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .goods-item:hover::before {
+            left: 100%;
+        }
+
+        .goods-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #4ecdc4;
+        }
+
+        .goods-image {
+            width: 200px;
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+            border: 2px dashed #ddd;
+            position: relative;
+        }
+
+        .goods-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .goods-price {
+            font-size: 1.8rem;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .goods-note {
+            font-size: 0.9rem;
+            color: #666;
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .special-item {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .special-item .goods-name {
+            color: white;
+        }
+
+        .special-item .goods-price {
+            color: #ffd700;
+        }
+
+        .special-section {
+            background: #f8f9fa;
+            padding: 40px;
+            margin-top: 20px;
+        }
+
+        .special-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .special-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .price-table-section {
+            background: white;
+            padding: 40px;
+            margin: 20px 0;
+        }
+
+        .price-table-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .price-table-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+
+        .price-table th {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .price-table td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .price-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .price-table tr:hover {
+            background: #e3f2fd;
+            transition: background 0.3s ease;
+        }
+
+        .total-row {
+            background: linear-gradient(45deg, #667eea, #764ba2) !important;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .total-row:hover {
+            background: linear-gradient(45deg, #667eea, #764ba2) !important;
+        }
+
+        .total-note {
+            padding: 15px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9rem;
+        }
+
+        .price-pending {
+            color: #ffa500;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .goods-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .goods-image {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- パスワード認証画面 -->
+    <div id="passwordScreen" class="password-screen">
+        <div class="password-container">
+            <h2>🔐 アクセス認証</h2>
+            <p>このページを閲覧するにはパスワードが必要です</p>
+            <input type="password" id="passwordInput" class="password-input" placeholder="パスワードを入力してください">
+            <button onclick="checkPassword()" class="password-button">ログイン</button>
+            <div id="errorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div id="mainContent" class="main-content">
+        <div class="container">
+            <div class="header">
+                <h1>🎉 2025年 バースデーグッズ 🎉</h1>
+                <p>特別なバースデーを記念した限定グッズをお届けします</p>
+            </div>
+
+            <div class="goods-grid">
+                <div class="goods-item">
+                    <div class="goods-image">商品画像2.jpg</div>
+                    <div class="goods-name">アクリルスタンドA</div>
+                    <div class="goods-price">¥1,800</div>
+                </div>
+
+                <div class="goods-item">
+                    <div class="goods-image">ブロマイドA.jpg</div>
+                    <div class="goods-name">ブロマイドA</div>
+                    <div class="goods-price">¥1,200</div>
+                </div>
+
+                <div class="goods-item">
+                    <div class="goods-image">ブロマイドB.jpg</div>
+                    <div class="goods-name">ブロマイドB</div>
+                    <div class="goods-price">¥1,200</div>
+                </div>
+
+                <div class="goods-item">
+                    <div class="goods-image">faceporch.jpg</div>
+                    <div class="goods-name">フェイスポーチ</div>
+                    <div class="goods-price">¥3,000</div>
+                </div>
+
+                <div class="goods-item">
+                    <div class="goods-image">magnet.jpg</div>
+                    <div class="goods-name">チェキ風マグネット</div>
+                    <div class="goods-price">¥800</div>
+                </div>
+
+                <div class="goods-item">
+                    <div class="goods-image">akuriru_stickert.jpg</div>
+                    <div class="goods-name">アクリルステッカー</div>
+                    <div class="goods-price">¥800</div>
+                </div>
+
+                <div class="goods-item">
+                    <div class="goods-image">缶バッジ.jpg</div>
+                    <div class="goods-name">ランダム缶バッジ</div>
+                    <div class="goods-price">¥700</div>
+                    <div class="goods-note">全6種</div>
+                </div>
+            </div>
+
+            <div class="special-section">
+                <h2>✨ その他の特別商品 ✨</h2>
+                <div class="special-grid">
+                    <div class="goods-item special-item">
+                        <div class="goods-image">kuchu_.jpg</div>
+                        <div class="goods-name">"ポジ男" スペシャルアクスタ</div>
+                        <div class="goods-price price-pending">金額確認中</div>
+                    </div>
+
+                    <div class="goods-item special-item">
+                        <div class="goods-image">tshirts.jpg</div>
+                        <div class="goods-name">Tシャツ</div>
+                        <div class="goods-price">¥3,800</div>
+                    </div>
+
+                    <div class="goods-item special-item">
+                        <div class="goods-image">kuji.jpg</div>
+                        <div class="goods-name">ランダムくじ</div>
+                        <div class="goods-price">¥800</div>
+                        <div class="goods-note">会場限定</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="price-table-section">
+                <h2>📋 商品一覧・価格表</h2>
+                <div class="price-table-container">
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>商品名</th>
+                                <th>価格（税込）</th>
+                                <th>備考</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>アクリルスタンドA</td>
+                                <td>¥1,800</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>ブロマイドA</td>
+                                <td>¥1,200</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>ブロマイドB</td>
+                                <td>¥1,200</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>フェイスポーチ</td>
+                                <td>¥3,000</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>チェキ風マグネット</td>
+                                <td>¥800</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>アクリルステッカー</td>
+                                <td>¥800</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>ランダム缶バッジ</td>
+                                <td>¥700</td>
+                                <td>全6種</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>合計金額</strong></td>
+                                <td><strong>¥9,500</strong></td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total-note">
+                        <p>**※【"ポジ男" スペシャルアクスタ】と【Tシャツ】は上記の金額に含んでいません**</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>© Fat-Choi inc.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const passwordInput = document.getElementById('passwordInput');
+            const errorMessage = document.getElementById('errorMessage');
+            const correctPassword = 'kt2025';
+            
+            if (passwordInput.value === correctPassword) {
+                document.getElementById('passwordScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                errorMessage.textContent = '';
+            } else {
+                errorMessage.textContent = 'パスワードが間違っています。もう一度お試しください。';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        // Enterキーでもログインできるようにする
+        document.getElementById('passwordInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
